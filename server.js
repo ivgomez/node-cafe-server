@@ -1,4 +1,4 @@
-require("./config");
+require("./app/config");
 const express = require("express");
 const mongoose = require("mongoose");
 
@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // routes
-app.use(require("./routes/index"));
+app.use(require("./app/routes/index"));
 
 mongoose.connect(
   process.env.URLDB,
