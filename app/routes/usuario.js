@@ -1,12 +1,13 @@
 const express = require("express");
 const UsuarioService = require("../services/usuarioService");
 const { buildResponse } = require("../utils/responseBuilder");
+const { checkToken } = require("../middlewares/authMiddleware");
 const app = express();
 const us = new UsuarioService();
 const route = "/usuarios";
 
-//GET USER
-app.get(route, (req, res) => {
+//GET USERS
+app.get(route, checkToken, (req, res) => {
   const { desde = 0, limite = 5 } = req.query;
   us.getAllUsers(Number(desde), Number(limite), (p) => buildResponse(p, res));
 });

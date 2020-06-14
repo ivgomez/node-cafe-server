@@ -1,5 +1,5 @@
 const Usuario = require("../schemas/usuarioSchema");
-const _ = require("underscore");
+const pick = require("underscore");
 const bcrypt = require("bcryptjs");
 const {
   createErrorResponse,
@@ -73,7 +73,6 @@ class UsuarioService {
       callback(
         createOkResponse({
           usuario: usuarioDB,
-          token: "123",
         })
       );
     });

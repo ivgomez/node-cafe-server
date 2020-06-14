@@ -4,6 +4,16 @@
 process.env.PORT = process.env.PORT || 3000;
 
 //========================================
+// Vencimiento token
+//========================================
+process.env.CADUCIDAD_TOKEN = 60 * 60 * 24 * 30;
+
+//========================================
+// Seed
+//========================================
+process.env.SEED = "development-seed";
+
+//========================================
 // Environment
 //========================================
 process.env.NODE_ENV = process.env.NODE_ENV || "dev";
@@ -16,8 +26,7 @@ let urlDB;
 if (process.env.NODE_ENV === "dev") {
   urlDB = "mongodb://localhost:27017/cafe";
 } else {
-  urlDB =
-    "mongodb+srv://cafeUser:nmrJfRNslXoxhT8y@cluster0-eazvq.azure.mongodb.net/cafe?retryWrites=true&w=majority";
+  urlDB = process.env.MONGO_URI;
 }
 
 process.env.URLDB = urlDB;
