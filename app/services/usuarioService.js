@@ -1,5 +1,5 @@
 const Usuario = require("../schemas/usuarioSchema");
-const pick = require("underscore");
+const _ = require("underscore");
 const bcrypt = require("bcryptjs");
 const {
   createErrorResponse,
@@ -15,6 +15,7 @@ class UsuarioService {
       .exec((err, usuarios) => {
         if (err) {
           callback(createErrorResponse(err));
+          return;
         }
         Usuario.countDocuments({ estado: true }, (err, conteo) => {
           callback(
@@ -38,6 +39,7 @@ class UsuarioService {
     usuario.save((err, usuarioDB) => {
       if (err) {
         callback(createErrorResponse(err));
+        return;
       }
       callback(
         createOkResponse({
@@ -49,10 +51,6 @@ class UsuarioService {
 
   getUserByEmail = (email, callback) => {
     this.getByQuery({ email }, callback);
-  };
-
-  getUserById = (id, callback) => {
-    this.getByQuery({ id }, callback);
   };
 
   getByQuery = (query, callback) => {

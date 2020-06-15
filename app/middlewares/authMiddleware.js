@@ -7,10 +7,10 @@ const checkToken = (req, res, next) => {
   const token = req.get("token");
   jwt.verify(token, process.env.SEED, (err, decoded) => {
     if (err) {
-      buildResponse(err, res);
+      buildResponse({ err: { message: "Token no válido" } }, res);
       return;
     }
-    require.usuario = decoded.usuario;
+    req.usuario = decoded.usuario;
     next();
   });
 };
