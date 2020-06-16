@@ -9,4 +9,9 @@ app.post("/login", (req, res) => {
   authService.login(req.body, (p) => buildResponse(p, res));
 });
 
+app.post("/google", async (req, res) => {
+  const token = req.body.idtoken;
+  await authService.googleLogin(token, (p) => buildResponse(p, res));
+});
+
 module.exports = app;

@@ -28,14 +28,14 @@ class UsuarioService {
       });
   };
 
-  createUsuario = ({ nombre, email, password, role }, callback) => {
-    let usuario = new Usuario({
+  createUsuario = ({ nombre, email, password, role, google }, callback) => {
+    const usuario = new Usuario({
       nombre,
       email,
-      password: bcrypt.hashSync(password, 10),
-      role,
+      password: password ? bcrypt.hashSync(password, 10) : ":)",
+      role: role || "USER_ROLE",
+      google,
     });
-
     usuario.save((err, usuarioDB) => {
       if (err) {
         callback(createErrorResponse(err));
@@ -76,6 +76,29 @@ class UsuarioService {
     });
   };
 
+  getUserByGoogleEmail = (query, callback) => {
+    Usuario.findOne(query, (err, usuarioDB) => {
+      if (err) {
+        callback(createErrorResponse(err));
+        return;
+      }
+
+      if (usuarioDB && usuarioDB.google === false) {
+        callback(
+          createErrorResponse({
+            message: "Debe usar su autenticación normal",
+          })
+        );
+      } else {
+        callback(
+          createOkResponse({
+            usuario: usuarioDB,
+          })
+        );
+      }
+    });
+  };
+
   updateUser = (query, callback) => {
     let id = query.params.id;
     let body = _.pick(query.body, ["nombre", "email", "img", "role", "estado"]);
@@ -105,8 +128,6 @@ class UsuarioService {
       cambiaEstado,
       { new: true },
       (err, usuarioBorrado) => {
-        console.log("err", err);
-        console.log("usuarioBorrado", usuarioBorrado);
         if (err) {
           return callback(createErrorResponse(err));
         }

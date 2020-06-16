@@ -8,6 +8,19 @@ const us = new UsuarioService();
 const route = "/usuarios";
 
 //GET ALL USERS
+/**
+ * @swagger
+ * /usuarios:
+ *  get:
+ *    tags:
+ *      - usuarios
+ *    description: Endpoint to get all users
+ *    produces:
+ *     - application/json
+ *    responses:
+ *      '200':
+ *        description: A succesfull response
+ */
 app.get(route, [checkToken], (req, res) => {
   const { desde = 0, limite = 5 } = req.query;
   us.getAllUsers(Number(desde), Number(limite), (p) => buildResponse(p, res));
