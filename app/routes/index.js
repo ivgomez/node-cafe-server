@@ -9,5 +9,7 @@ app.use(require("./login"));
 app.use(require("./category"));
 // products route
 app.use(require("./product"));
+// upload file route
+app.use(require("./upload"));
 
 module.exports = app;
