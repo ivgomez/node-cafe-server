@@ -5,5 +5,9 @@ const app = express();
 app.use(require("./usuario"));
 // login route
 app.use(require("./login"));
+// categories route
+app.use(require("./category"));
+// products route
+app.use(require("./product"));
 
 module.exports = app;

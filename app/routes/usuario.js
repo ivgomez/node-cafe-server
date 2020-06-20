@@ -20,6 +20,11 @@ const route = "/usuarios";
  *    responses:
  *      '200':
  *        description: A succesfull response
+ *  securityDefinitions:
+ *    authentication:
+ *      type: apiKey
+ *      name: token
+ *      in: header
  */
 app.get(route, [checkToken], (req, res) => {
   const { desde = 0, limite = 5 } = req.query;
