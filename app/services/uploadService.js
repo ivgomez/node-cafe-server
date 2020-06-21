@@ -1,5 +1,6 @@
 const { createOkResponse, createErrorResponse } = require("../utils/responseBuilder");
 const User = require("../schemas/usuarioSchema");
+const Product = require("../schemas/productSchema");
 
 const fs = require("fs");
 const path = require("path");
@@ -12,23 +13,24 @@ class UploadService {
     if (fs.existsSync(fileURL)) fs.unlinkSync(fileURL);
   };
 
-  saveUserImage = (id, fileName, collectionType, callback) => {
-    User.findById(id, (err, userDB) => {
+  saveFiles = (id, fileName, collectionType, callback) => {
+    const Collection = collectionType === "users" ? User : Product;
+    Collection.findById(id, (err, responseDB) => {
       if (err) {
         this.deleteFile(fileName, collectionType);
         callback(createErrorResponse(err));
         return;
       }
-      if (!userDB) {
+      if (!responseDB) {
         this.deleteFile(fileName, collectionType);
         callback(createErrorResponse({ message: "Not found" }));
         return;
       }
-      this.deleteFile(userDB.img, collectionType);
-      userDB.img = fileName;
-      userDB.save((err, userSaved) => {
+      this.deleteFile(responseDB.img, collectionType);
+      responseDB.img = fileName;
+      responseDB.save((err, dataSaved) => {
         if (err) return callback(createErrorResponse(err));
-        callback(createOkResponse({ user: userSaved, img: fileName }));
+        callback(createOkResponse({ [collectionType]: dataSaved, img: fileName }));
       });
     });
   };
@@ -55,7 +57,7 @@ class UploadService {
     // Use the mv() method to place the file somewhere on your server
     file.mv(`uploads/${collectionType}/${fileName}`, (err) => {
       if (err) return callback(createErrorResponse(err));
-      this.saveUserImage(id, fileName, collectionType, callback);
+      this.saveFiles(id, fileName, collectionType, callback);
       createOkResponse({ message: "file uploaded succesfully" });
     });
   };

@@ -11,5 +11,7 @@ app.use(require("./category"));
 app.use(require("./product"));
 // upload file route
 app.use(require("./upload"));
+// display image route
+app.use(require("./images"));
 
 module.exports = app;
